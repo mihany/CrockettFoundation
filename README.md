@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Crockett Foundation — website
 
-## Getting Started
+A static Next.js site for The Crockett Foundation, deployed to GitHub Pages. This is a **draft build for client review** — see the Handover checklist below for everything that still needs a real value before launch.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.local.example` to `.env.local` for local dev:
 
-## Learn More
+```
+NEXT_PUBLIC_BASE_PATH=
+```
 
-To learn more about Next.js, take a look at the following resources:
+- **`NEXT_PUBLIC_BASE_PATH`** — the subdirectory the site is served from. Empty for local dev. In CI it's set to `/<repo-name>` so the static export resolves correctly under the GitHub Pages project URL (`https://<user>.github.io/<repo-name>/`). It's read directly in `next.config.ts` (for `basePath`/`assetPrefix`) and by the `asset()` helper in `src/lib/site.ts` (for any raw reference to a `public/` file that bypasses `next/link`/`next/image`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+```
 
-## Deploy on Vercel
+This is a static export (`output: 'export'` in `next.config.ts`) — output goes to `out/` as plain HTML/CSS/JS, no server required. There's no API routes, server actions, middleware, or server-side image optimization anywhere in this project; all images are `unoptimized: true`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploying to GitHub Pages
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The workflow at `.github/workflows/deploy.yml` builds and deploys `out/` using `actions/upload-pages-artifact` + `actions/deploy-pages`.
+
+**It runs on manual trigger (`workflow_dispatch`) plus push to `main`** — while this is still a draft under review, you don't want every push redeploying the live preview link automatically without a chance to check it first. To trigger a deploy by hand: go to the repo's **Actions** tab → **Deploy to GitHub Pages** → **Run workflow**.
+
+### One-time setup to get the site live
+
+1. Push this repository to GitHub (if it isn't already).
+2. In the repo, go to **Settings → Pages**. Under **Build and deployment → Source**, choose **GitHub Actions** (not "Deploy from a branch").
+3. Go to the **Actions** tab → **Deploy to GitHub Pages** → **Run workflow** → confirm on `main`.
+4. Once it finishes, the **Pages** settings page (and the workflow run's summary) will show the live URL: `https://<your-github-username>.github.io/<repo-name>/`.
+5. You do **not** need to set `NEXT_PUBLIC_BASE_PATH` yourself anywhere in GitHub — the workflow sets it automatically to `/<repo-name>` (`github.event.repository.name`) at build time. It only needs to be set by hand for local dev (where it should stay empty) or if you ever build/export manually outside CI.
+
+After the first deploy, every subsequent one is the same: **Actions → Deploy to GitHub Pages → Run workflow**.
+
+## Where content lives, and how a CMS will replace it
+
+All copy lives in typed TypeScript files under `src/content/` — nothing is hardcoded inside a page or component (a small number of fixed structural labels like "Mission" or nav labels are the deliberate exception; see the comment in `src/content/types.ts` above `PageIntro`).
+
+- `types.ts` — every content shape.
+- `site.ts`, `home.ts`, `about.ts`, `team.ts`, `programs.ts`, `partner.ts`, `legal.ts`, `pages.ts` — the actual draft data, one file per concern.
+- `index.ts` — the **only** thing pages import from. It exports `async` accessor functions (`getSiteSettings()`, `getHomeContent()`, etc.) that currently just return the local data above.
+
+When a headless CMS is connected later, only the *bodies* of the functions in `index.ts` change — from returning local data to fetching from the CMS. No page or component needs to change, because they never imported the data files directly.
+
+## Design tokens
+
+Colors and fonts are defined as CSS custom properties in `src/app/globals.css` and mapped into Tailwind v4's CSS-first `@theme` block (there is no `tailwind.config.ts` — this project uses Tailwind v4).
+
+## Handover checklist
+
+**Every value below is a placeholder or `null` and must be filled in before the real launch.** Each one already has a defined fallback state in the UI (never a dead link or blank element), so the site works fine as a draft preview without them — but a real client launch needs all of these resolved.
+
+| Value | Lives in | Current state |
+| --- | --- | --- |
+| Board names, photos, bios | `src/content/team.ts` (`TeamMember.name` / `.photo` / `.bio`) | All `null` — Who We Are shows role-only cards with a placeholder portrait and "Biography coming soon." |
+| Donation URL | `src/content/partner.ts` (`PartnerContent.donationUrl`) | `null` — Partner With Us shows a bordered "Online giving opens soon" placeholder instead of a donate button. |
+| Contact form URL | `src/lib/site.ts` (`CONTACT_FORM_URL`) | `null` — Contact page shows "Our contact form is coming soon" instead of a dead link. |
+| Program deadlines and apply links | `src/content/programs.ts` (`Program.deadline` / `.applyUrl`, both programs) | All `null` — program pages show "Applications open soon" with no apply button. |
+| EIN | `src/content/site.ts` (`SiteSettings.ein`) | `null` — the footer omits the entire 501(c)(3)/EIN line while it's null. |
+| Social links | `src/content/site.ts` (`SiteSettings.socialLinks`) | Empty array — nothing rendered anywhere yet (no component currently reads this field). |
+| Real contact email | **Three separate places**, not cross-linked: `src/content/site.ts` (`SiteSettings.contactEmail`), `src/content/partner.ts` (`PartnerContent.contactEmail`), and hardcoded inline in `src/content/legal.ts`'s privacy body text | All set to the same unconfirmed placeholder, `info@thecrockettfo.org` — update all three together. |
+| Privacy policy body | `src/content/legal.ts` (`LegalPage.body`) and `src/content/pages.ts` (`pageIntros.privacy`) | Placeholder text stating the policy is being drafted. |
+| **`noindex, nofollow` robots tag** | `src/app/layout.tsx` (`generateMetadata`'s `robots` field) | Applied site-wide. **Must be removed before the real launch** — this draft preview should not be indexed, but the real site needs to be. |
+| **Sitemap domain** | `src/lib/site.ts` (`SITE_URL`) | Placeholder `https://example.com` — `src/app/sitemap.ts` builds every URL from this constant. Set it to the real GitHub Pages URL or custom domain before launch, or `sitemap.xml` will point at the wrong domain. |
+
+A good amount of section copy throughout the site (home page CTAs aside, things like the tagline, the footer note, the "Get in touch" and "Support a student" blocks, and the Programs/Who We Are/Contact page intros) is also draft text I wrote to avoid blank sections — each is marked `// draft — pending review` at its source in `src/content/`. Search for that comment to find all of them.
