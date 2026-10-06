@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPrograms, getProgramBySlug } from "@/content";
 import { Container } from "@/components/Container";
+import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ProgramCard } from "@/components/ProgramCard";
@@ -49,8 +50,17 @@ export default async function ProgramDetailPage(props: ProgramDetailPageProps) {
             <StatusBadge status={program.status} />
           </div>
           <p className="mt-6 max-w-[72ch] text-lg text-ink">{program.summary}</p>
+          <ContentImage image={program.image} className="mt-10 max-w-3xl" />
         </Container>
       </section>
+
+      {program.pullQuote && (
+        <Section tone="cream" rule>
+          <blockquote className="max-w-[40ch] font-display text-2xl leading-snug text-gold-deep sm:text-3xl lg:text-4xl">
+            &ldquo;{program.pullQuote}&rdquo;
+          </blockquote>
+        </Section>
+      )}
 
       <Section rule>
         <h2 className="font-display text-xl text-gold-deep">What it covers</h2>

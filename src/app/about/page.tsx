@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAboutContent } from "@/content";
 import { Container } from "@/components/Container";
+import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,6 +19,7 @@ export default async function AboutPage() {
         <Container>
           <h1 className="font-display text-4xl text-gold-deep sm:text-5xl">About</h1>
           <p className="mt-6 max-w-[60ch] text-lg text-ink">{about.intro}</p>
+          <ContentImage image={about.image} className="mt-10" />
         </Container>
       </section>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/Container";
+import { StudioRedirect } from "@/components/StudioRedirect";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section className="bg-white py-24">
+      <StudioRedirect />
       <Container>
         <h1 className="font-display text-4xl text-gold-deep sm:text-5xl">Page not found</h1>
         <p className="mt-6 max-w-[60ch] text-lg text-ink">

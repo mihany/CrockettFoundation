@@ -1,11 +1,22 @@
 import Link from "next/link";
-import { getHomeContent, getPrograms } from "@/content";
+import {
+  getFeaturedProgram,
+  getHomeContent,
+  getNextUpcomingEvent,
+  getPrograms,
+} from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { ProgramCard } from "@/components/ProgramCard";
+import { EventCard } from "@/components/EventCard";
 
 export default async function HomePage() {
-  const [home, programs] = await Promise.all([getHomeContent(), getPrograms()]);
+  const [home, programs, featuredProgram, nextEvent] = await Promise.all([
+    getHomeContent(),
+    getPrograms(),
+    getFeaturedProgram(),
+    getNextUpcomingEvent(),
+  ]);
 
   return (
     <>
@@ -64,7 +75,32 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section tone="cream" rule>
+      {(featuredProgram || nextEvent) && (
+        <Section tone="cream" rule>
+          <div
+            className={`grid gap-12 ${featuredProgram && nextEvent ? "lg:grid-cols-2 lg:gap-16" : ""}`}
+          >
+            {featuredProgram && (
+              <div>
+                <h2 className="font-display text-2xl text-gold-deep">Featured program</h2>
+                <div className="mt-8">
+                  <ProgramCard program={featuredProgram} headingLevel="h3" />
+                </div>
+              </div>
+            )}
+            {nextEvent && (
+              <div>
+                <h2 className="font-display text-2xl text-gold-deep">Next event</h2>
+                <div className="mt-8">
+                  <EventCard event={nextEvent} headingLevel="h3" stacked />
+                </div>
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
+
+      <Section rule>
         <h2 className="font-display text-2xl text-gold-deep">{home.connectHeading}</h2>
         <p className="mt-4 max-w-[60ch] text-ink">{home.connectBody}</p>
       </Section>

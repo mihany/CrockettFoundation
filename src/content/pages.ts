@@ -19,6 +19,11 @@ export const pageIntros: Record<PageKey, PageIntro> = {
     intro:
       "Scholarships and study abroad programs that remove the financial barriers standing between students and an international education.",
   },
+  events: {
+    heading: "Events",
+    intro:
+      "Information sessions, workshops, and gatherings for students, families, and supporters of The Crockett Foundation.", // draft — pending review
+  },
   contact: {
     heading: "Contact",
     intro:

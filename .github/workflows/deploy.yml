@@ -4,10 +4,20 @@ name: Deploy to GitHub Pages
 # under client review, so it does not auto-deploy on every push to a
 # feature branch. Run it by hand from the Actions tab (Run workflow) when
 # you want the preview link updated.
+#
+# Two more triggers keep the static export in step with Sanity:
+#   - repository_dispatch (type "sanity-publish"): fired by a Sanity webhook
+#     whenever an editor publishes, so content changes go live in a minute or two.
+#   - schedule: a daily rebuild, so events roll from "upcoming" to "past" on
+#     their own — that split is computed at build time.
 on:
   workflow_dispatch:
   push:
     branches: [main]
+  repository_dispatch:
+    types: [sanity-publish]
+  schedule:
+    - cron: "0 6 * * *"
 
 permissions:
   contents: read
@@ -42,6 +52,9 @@ jobs:
           # Repo is served from https://mihany.github.io/CrockettFoundation/,
           # so every asset and internal link needs this prefix.
           NEXT_PUBLIC_BASE_PATH: /CrockettFoundation
+          # Public identifiers, not secrets (they appear in every image URL).
+          NEXT_PUBLIC_SANITY_PROJECT_ID: enimvzp7
+          NEXT_PUBLIC_SANITY_DATASET: production
         run: npm run build
 
       - name: Upload artifact

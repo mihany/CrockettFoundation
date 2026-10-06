@@ -3,15 +3,15 @@
 // tagline and footerNote are not yet client-provided copy: tagline is a
 // short compression of the approved mission language, and footerNote reuses
 // the approved home mission pull quote verbatim. Flag both for review.
-// contactEmail is a placeholder — unconfirmed. ein is null until the client
-// supplies a real EIN; the footer omits the 501(c)(3)/EIN line entirely
-// while it is null, the same null-safe treatment as donationUrl.
+// ein is null until the client supplies a real EIN; the footer omits the
+// 501(c)(3)/EIN line entirely while it is null, the same null-safe treatment
+// as donationUrl.
 import type { SiteSettings } from "./types";
 
 export const siteSettings: SiteSettings = {
   orgName: "The Crockett Foundation",
   tagline: "Removing financial barriers to global education.", // draft — pending review
-  contactEmail: "info@thecrockettfo.org", // unconfirmed placeholder
+  contactEmail: "info@crockettfoundationdc.org",
   ein: null,
   socialLinks: [],
   donationUrl: null,

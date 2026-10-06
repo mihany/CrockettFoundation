@@ -47,6 +47,7 @@ export interface HomeContent {
 
 export interface AboutContent {
   intro: string;
+  image: ContentImage;
   mission: string;
   purpose: string;
   vision: string;
@@ -60,8 +61,8 @@ export interface TeamMember {
   order: number;
   /** Null until real portraits are supplied; components fall back to a placeholder. */
   photo: string | null;
-  /** Null until bios are written. */
-  bio: string | null;
+  /** One entry per paragraph. Null until a bio is written. */
+  bio: string[] | null;
 }
 
 export type ProgramCategory = "scholarship" | "program";
@@ -77,14 +78,58 @@ export interface Program {
   eligibility: string;
   requirements: string[];
   note?: string;
+  /** Optional quote shown prominently on the program's page. */
+  pullQuote?: string;
   /** Null until a deadline is set; components render "Applications open soon" instead. */
   deadline: string | null;
   /** Null until an application link exists; the apply CTA is hidden or disabled instead. */
   applyUrl: string | null;
+  /** Null until a photo is supplied; components fall back to a shared placeholder. */
+  image: ContentImage | null;
   order: number;
 }
 
+export interface ContentImage {
+  /** Path under public/ today; a CMS image URL later. */
+  src: string;
+  /** Describes the image for screen readers. */
+  alt: string;
+}
+
+export interface Event {
+  slug: string;
+  title: string;
+  summary: string;
+  /** Body copy, one entry per paragraph. */
+  description: string[];
+  /** ISO calendar date (YYYY-MM-DD). Whether an event is upcoming or past is derived from this, not stored. */
+  startDate: string;
+  /** Null for single-day events. */
+  endDate: string | null;
+  /** Null until a venue is confirmed; components render "Location to be announced" instead. */
+  location: string | null;
+  /** Null until a registration link exists; the register CTA is replaced with a "coming soon" note instead. */
+  registrationUrl: string | null;
+  /** Null until a photo is supplied; components fall back to a shared placeholder. */
+  image: ContentImage | null;
+}
+
+export interface InternshipsContent {
+  heading: string;
+  intro: string;
+  /** Time commitment and semester rules, shown as a standalone sentence. */
+  commitment: string;
+  rolesHeading: string;
+  roles: string[];
+  applyHeading: string;
+  applyIntro: string;
+  /** Fields the applicant's email must contain, in display order. */
+  requiredFields: string[];
+  applyEmail: string;
+}
+
 export interface PartnerContent {
+  internships: InternshipsContent;
   donateHeading: string;
   donateBody: string;
   /** Third-party donation URL. Null until a payment provider is chosen. */
@@ -109,4 +154,4 @@ export interface PageIntro {
   intro: string;
 }
 
-export type PageKey = "who-we-are" | "programs" | "contact" | "privacy";
+export type PageKey = "who-we-are" | "programs" | "events" | "contact" | "privacy";

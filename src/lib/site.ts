@@ -15,6 +15,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Who We Are", href: "/who-we-are" },
   { label: "Programs", href: "/programs" },
+  { label: "Events", href: "/events" },
   { label: "Partner With Us", href: "/partner-with-us" },
 ];
 
@@ -42,6 +43,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * href, a manifest reference).
  */
 export function asset(path: string): string {
+  // Absolute URLs (CMS images on cdn.sanity.io) are already complete.
+  if (/^https?:\/\//.test(path)) return path;
   const normalized = path.startsWith("/") ? path : `/${path}`;
   return `${basePath}${normalized}`;
 }

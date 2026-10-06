@@ -50,10 +50,12 @@ After the first deploy, every subsequent one is the same: **Actions → Deploy t
 All copy lives in typed TypeScript files under `src/content/` — nothing is hardcoded inside a page or component (a small number of fixed structural labels like "Mission" or nav labels are the deliberate exception; see the comment in `src/content/types.ts` above `PageIntro`).
 
 - `types.ts` — every content shape.
-- `site.ts`, `home.ts`, `about.ts`, `team.ts`, `programs.ts`, `partner.ts`, `legal.ts`, `pages.ts` — the actual draft data, one file per concern.
+- `site.ts`, `home.ts`, `about.ts`, `team.ts`, `programs.ts`, `events.ts` (placeholder events, all invented), `partner.ts`, `legal.ts`, `pages.ts` — the actual draft data, one file per concern.
 - `index.ts` — the **only** thing pages import from. It exports `async` accessor functions (`getSiteSettings()`, `getHomeContent()`, etc.) that currently just return the local data above.
 
 When a headless CMS is connected later, only the *bodies* of the functions in `index.ts` change — from returning local data to fetching from the CMS. No page or component needs to change, because they never imported the data files directly.
+
+The home page's "Featured program" and "Next event" blocks follow the same rule: they use `getFeaturedProgram()` and `getNextUpcomingEvent()`. The program is picked at random and the event is the soonest unfinished one. Both are chosen when the site is built, so they only change on the next deploy. Each accessor has a comment describing its Sanity equivalent.
 
 ## Design tokens
 
@@ -65,13 +67,13 @@ Colors and fonts are defined as CSS custom properties in `src/app/globals.css` a
 
 | Value | Lives in | Current state |
 | --- | --- | --- |
-| Board names, photos, bios | `src/content/team.ts` (`TeamMember.name` / `.photo` / `.bio`) | All `null` — Who We Are shows role-only cards with a placeholder portrait and "Biography coming soon." |
-| Donation URL | `src/content/partner.ts` (`PartnerContent.donationUrl`) | `null` — Partner With Us shows a bordered "Online giving opens soon" placeholder instead of a donate button. |
+| PayPal donate link | `src/content/partner.ts` (`PartnerContent.donationUrl`) | `null` — Partner With Us shows a bordered "Online giving opens soon" placeholder instead of the "Donate with PayPal" button. Set it to the client's PayPal donate link (`https://www.paypal.com/donate/?hosted_button_id=…`); the site is a static export, so a hosted PayPal link is the supported approach. |
+| Community Partnerships copy | `src/content/partner.ts` (`partnershipBody`) | Draft placeholder — the client's text arrived cut off ("Organizations …"). |
 | Contact form URL | `src/lib/site.ts` (`CONTACT_FORM_URL`) | `null` — Contact page shows "Our contact form is coming soon" instead of a dead link. |
 | Program deadlines and apply links | `src/content/programs.ts` (`Program.deadline` / `.applyUrl`, both programs) | All `null` — program pages show "Applications open soon" with no apply button. |
 | EIN | `src/content/site.ts` (`SiteSettings.ein`) | `null` — the footer omits the entire 501(c)(3)/EIN line while it's null. |
 | Social links | `src/content/site.ts` (`SiteSettings.socialLinks`) | Empty array — nothing rendered anywhere yet (no component currently reads this field). |
-| Real contact email | **Three separate places**, not cross-linked: `src/content/site.ts` (`SiteSettings.contactEmail`), `src/content/partner.ts` (`PartnerContent.contactEmail`), and hardcoded inline in `src/content/legal.ts`'s privacy body text | All set to the same unconfirmed placeholder, `info@thecrockettfo.org` — update all three together. |
+| Real contact email | **Three separate places**, not cross-linked: `src/content/site.ts` (`SiteSettings.contactEmail`), `src/content/partner.ts` (`PartnerContent.contactEmail`), and hardcoded inline in `src/content/legal.ts`'s privacy body text | All set to `info@crockettfoundationdc.org` (the address the client gave for internship applications) — update all three together, plus `internships.applyEmail` in `partner.ts`. |
 | Privacy policy body | `src/content/legal.ts` (`LegalPage.body`) and `src/content/pages.ts` (`pageIntros.privacy`) | Placeholder text stating the policy is being drafted. |
 | **`noindex, nofollow` robots tag** | `src/app/layout.tsx` (`generateMetadata`'s `robots` field) | Applied site-wide. **Must be removed before the real launch** — this draft preview should not be indexed, but the real site needs to be. |
 | **Sitemap domain** | `src/lib/site.ts` (`SITE_URL`) | Placeholder `https://example.com` — `src/app/sitemap.ts` builds every URL from this constant. Set it to the real GitHub Pages URL or custom domain before launch, or `sitemap.xml` will point at the wrong domain. |

@@ -5,7 +5,7 @@
 import type { HomeContent } from "./types";
 
 export const homeContent: HomeContent = {
-  heroHeading: "The flight should never be the reason a student stays home.",
+  heroHeading: "Cost should never be the reason a student stays home.", // draft — replaces the flight quote, which moved to the Global Leadership Scholarship page
   heroSubheading:
     "The Crockett Foundation removes the financial barriers that keep underserved high school and college students from studying abroad.",
   primaryCta: {
@@ -19,7 +19,7 @@ export const homeContent: HomeContent = {
   pillars: [
     {
       title: "Education",
-      body: "We fund the parts of an international education that scholarships usually leave out, starting with the cost of getting there.",
+      body: "We provide financial assistance for the parts of an international education that scholarships usually leave out.",
     },
     {
       title: "Global Citizenship",

@@ -10,6 +10,10 @@ import type { AboutContent } from "./types";
 export const aboutContent: AboutContent = {
   intro:
     "The Crockett Foundation removes the financial barriers that keep underserved students from studying abroad. Our work is guided by three commitments.",
+  image: {
+    src: "/images/about-banner.webp",
+    alt: "A smiling young man in a yellow sweater talking on his phone in front of an open laptop.",
+  },
   mission:
     "To remove financial barriers to global education by providing financial and educational assistance to underserved high school and college students enabling access to learning experiences that strengthen career readiness, global competency, and long-term economic mobility.",
   purpose:
