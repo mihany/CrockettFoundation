@@ -49,9 +49,10 @@ jobs:
 
       - name: Build
         env:
-          # Repo is served from https://mihany.github.io/CrockettFoundation/,
-          # so every asset and internal link needs this prefix.
-          NEXT_PUBLIC_BASE_PATH: /CrockettFoundation
+          # Served from the root of the custom domain
+          # (https://crockettfoundationdc.org/), so no base path. If the custom
+          # domain is ever removed, set NEXT_PUBLIC_BASE_PATH: /CrockettFoundation
+          # here so the site works under https://mihany.github.io/CrockettFoundation/.
           # Public identifiers, not secrets (they appear in every image URL).
           NEXT_PUBLIC_SANITY_PROJECT_ID: enimvzp7
           NEXT_PUBLIC_SANITY_DATASET: production

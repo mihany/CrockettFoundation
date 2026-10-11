@@ -28,11 +28,9 @@ export const DONATE_HREF = "/partner-with-us";
 // link, the same treatment as PartnerContent.donationUrl.
 export const CONTACT_FORM_URL: string | null = null;
 
-// Placeholder — the real domain (GitHub Pages or a custom domain) is not
-// known yet. Used only to build absolute URLs in sitemap.ts; nothing else on
-// the site depends on it. Must be set correctly before launch — see the
-// README's Handover checklist.
-export const SITE_URL = "https://example.com";
+// The site's custom domain. Used only to build absolute URLs in sitemap.ts;
+// nothing else on the site depends on it.
+export const SITE_URL = "https://crockettfoundationdc.org";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 

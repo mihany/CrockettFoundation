@@ -19,7 +19,7 @@ Copy `.env.local.example` to `.env.local` for local dev:
 NEXT_PUBLIC_BASE_PATH=
 ```
 
-- **`NEXT_PUBLIC_BASE_PATH`** — the subdirectory the site is served from. Empty for local dev. In CI it's set to `/<repo-name>` so the static export resolves correctly under the GitHub Pages project URL (`https://<user>.github.io/<repo-name>/`). It's read directly in `next.config.ts` (for `basePath`/`assetPrefix`) and by the `asset()` helper in `src/lib/site.ts` (for any raw reference to a `public/` file that bypasses `next/link`/`next/image`).
+- **`NEXT_PUBLIC_BASE_PATH`** — the subdirectory the site is served from. Empty for local dev. In CI it's left empty too, because the site is served from the root of its custom domain (`https://crockettfoundationdc.org/`). It would only be set to `/<repo-name>` if the site went back to being served from the GitHub Pages project URL (`https://<user>.github.io/<repo-name>/`). It's read directly in `next.config.ts` (for `basePath`/`assetPrefix`) and by the `asset()` helper in `src/lib/site.ts` (for any raw reference to a `public/` file that bypasses `next/link`/`next/image`).
 
 ## Production build
 
@@ -40,8 +40,8 @@ The workflow at `.github/workflows/deploy.yml` builds and deploys `out/` using `
 1. Push this repository to GitHub (if it isn't already).
 2. In the repo, go to **Settings → Pages**. Under **Build and deployment → Source**, choose **GitHub Actions** (not "Deploy from a branch").
 3. Go to the **Actions** tab → **Deploy to GitHub Pages** → **Run workflow** → confirm on `main`.
-4. Once it finishes, the **Pages** settings page (and the workflow run's summary) will show the live URL: `https://<your-github-username>.github.io/<repo-name>/`.
-5. You do **not** need to set `NEXT_PUBLIC_BASE_PATH` yourself anywhere in GitHub — the workflow sets it automatically to `/<repo-name>` (`github.event.repository.name`) at build time. It only needs to be set by hand for local dev (where it should stay empty) or if you ever build/export manually outside CI.
+4. Once it finishes, the site is live at the custom domain set under **Settings → Pages → Custom domain**: `https://crockettfoundationdc.org/`. DNS for the domain is managed in Cloudflare and points at GitHub Pages.
+5. The workflow does **not** set `NEXT_PUBLIC_BASE_PATH`, because the site is served from the domain root. If the custom domain is ever removed, add `NEXT_PUBLIC_BASE_PATH: /<repo-name>` to the workflow's Build step, or every asset and link will break under the `github.io/<repo-name>/` URL.
 
 After the first deploy, every subsequent one is the same: **Actions → Deploy to GitHub Pages → Run workflow**.
 
@@ -76,6 +76,5 @@ Colors and fonts are defined as CSS custom properties in `src/app/globals.css` a
 | Real contact email | **Three separate places**, not cross-linked: `src/content/site.ts` (`SiteSettings.contactEmail`), `src/content/partner.ts` (`PartnerContent.contactEmail`), and hardcoded inline in `src/content/legal.ts`'s privacy body text | All set to `info@crockettfoundationdc.org` (the address the client gave for internship applications) — update all three together, plus `internships.applyEmail` in `partner.ts`. |
 | Privacy policy body | `src/content/legal.ts` (`LegalPage.body`) and `src/content/pages.ts` (`pageIntros.privacy`) | Placeholder text stating the policy is being drafted. |
 | **`noindex, nofollow` robots tag** | `src/app/layout.tsx` (`generateMetadata`'s `robots` field) | Applied site-wide. **Must be removed before the real launch** — this draft preview should not be indexed, but the real site needs to be. |
-| **Sitemap domain** | `src/lib/site.ts` (`SITE_URL`) | Placeholder `https://example.com` — `src/app/sitemap.ts` builds every URL from this constant. Set it to the real GitHub Pages URL or custom domain before launch, or `sitemap.xml` will point at the wrong domain. |
 
 A good amount of section copy throughout the site (home page CTAs aside, things like the tagline, the footer note, the "Get in touch" and "Support a student" blocks, and the Programs/Who We Are/Contact page intros) is also draft text I wrote to avoid blank sections — each is marked `// draft — pending review` at its source in `src/content/`. Search for that comment to find all of them.
