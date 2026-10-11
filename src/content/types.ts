@@ -32,6 +32,7 @@ export interface SiteSettings {
 export interface Pillar {
   title: string;
   body: string;
+  image: ContentImage;
 }
 
 export interface HomeContent {

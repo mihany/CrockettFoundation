@@ -15,7 +15,7 @@ export const aboutContent: AboutContent = {
     alt: "A smiling young man in a yellow sweater talking on his phone in front of an open laptop.",
   },
   mission:
-    "To remove financial barriers to global education by providing financial and educational assistance to underserved high school and college students enabling access to learning experiences that strengthen career readiness, global competency, and long-term economic mobility.",
+    "To limit financial barriers to global education by providing financial and educational assistance to underserved high school and college students enabling access to learning experiences that strengthen career readiness, global competency, and long-term economic mobility.",
   purpose:
     "To expand equitable access to transformative educational opportunities by ensuring all students from economic backgrounds can participate in international academic learning experiences that support personal growth, workforce preparedness, professional advancement.",
   vision:

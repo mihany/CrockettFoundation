@@ -7,6 +7,7 @@ import {
 } from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
+import { ContentImage } from "@/components/ContentImage";
 import { ProgramCard } from "@/components/ProgramCard";
 import { EventCard } from "@/components/EventCard";
 
@@ -48,12 +49,13 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Pillars — prose columns only: a heading and a paragraph, no icons,
-          no cards, no borders, no shadows, no equal-height boxes. */}
+      {/* Pillars — an image, a heading and a paragraph per column; no icons,
+          cards, borders, shadows, or equal-height boxes. */}
       <Section rule>
         <div className="grid gap-10 sm:grid-cols-3 sm:gap-8">
           {home.pillars.map((pillar) => (
             <div key={pillar.title}>
+              <ContentImage image={pillar.image} className="mb-5 aspect-[3/2] rounded-sm" />
               <h2 className="font-display text-xl text-gold-deep">{pillar.title}</h2>
               <p className="mt-3 max-w-[38ch] text-ink">{pillar.body}</p>
             </div>

@@ -52,7 +52,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${newsreader.variable} ${karla.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      {/* Browser extensions (Grammarly, password managers) add attributes to
+          <body> before hydration; without this React logs a mismatch in dev. */}
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <SiteHeader settings={settings} />
         <main className="flex-1">{children}</main>
         <SiteFooter settings={settings} />

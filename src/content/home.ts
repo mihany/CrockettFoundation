@@ -20,18 +20,30 @@ export const homeContent: HomeContent = {
     {
       title: "Education",
       body: "We provide financial assistance for the parts of an international education that scholarships usually leave out.",
+      image: {
+        src: "/images/pillars/education.webp",
+        alt: "Students in a classroom facing a teacher who stands in front of a world map and international flags.",
+      },
     },
     {
       title: "Global Citizenship",
       body: "Students return with intercultural skills and a working understanding of a region most of their peers have only read about.",
+      image: {
+        src: "/images/pillars/global-citizenship.webp",
+        alt: "Many hands from different people holding a globe together.",
+      },
     },
     {
       title: "Equity and Access",
       body: "Study abroad has long tracked family income. We award on need so that it stops doing so.",
+      image: {
+        src: "/images/pillars/equity-and-access.webp",
+        alt: "A stack of language books — Spanish, French, Arabic, Mandarin Chinese and Portuguese — beside an open notebook and pen.",
+      },
     },
   ],
   missionPullQuote:
-    "To remove financial barriers to global education by providing financial and educational assistance to underserved high school and college students.",
+    "To limit financial barriers to global education by providing financial and educational assistance to underserved high school and college students.",
   connectHeading: "Get in touch", // draft — pending review
   connectBody:
     "Questions about our programs, or interested in supporting a student? We'd like to hear from you.", // draft — pending review

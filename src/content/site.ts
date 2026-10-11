@@ -16,5 +16,5 @@ export const siteSettings: SiteSettings = {
   socialLinks: [],
   donationUrl: null,
   footerNote:
-    "To remove financial barriers to global education by providing financial and educational assistance to underserved high school and college students.", // draft — pending review; reused verbatim from the home mission pull quote
+    "To limit financial barriers to global education by providing financial and educational assistance to underserved high school and college students.", // draft — pending review; reused verbatim from the home mission pull quote
 };
