@@ -1,9 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   getFeaturedProgram,
   getHomeContent,
   getNextUpcomingEvent,
-  getPrograms,
 } from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
@@ -11,10 +11,13 @@ import { ContentImage } from "@/components/ContentImage";
 import { ProgramCard } from "@/components/ProgramCard";
 import { EventCard } from "@/components/EventCard";
 
+// Title, description and share card come from the root layout's defaults;
+// only the canonical is page-specific, so it doesn't leak to other routes.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default async function HomePage() {
-  const [home, programs, featuredProgram, nextEvent] = await Promise.all([
+  const [home, featuredProgram, nextEvent] = await Promise.all([
     getHomeContent(),
-    getPrograms(),
     getFeaturedProgram(),
     getNextUpcomingEvent(),
   ]);
@@ -67,14 +70,6 @@ export default async function HomePage() {
         <blockquote className="max-w-[60ch] font-display text-2xl leading-snug text-gold-deep sm:text-3xl lg:text-4xl">
           &ldquo;{home.missionPullQuote}&rdquo;
         </blockquote>
-      </Section>
-
-      <Section rule>
-        <div className="grid gap-10 sm:grid-cols-2 sm:gap-12">
-          {programs.map((program) => (
-            <ProgramCard key={program.slug} program={program} />
-          ))}
-        </div>
       </Section>
 
       {(featuredProgram || nextEvent) && (

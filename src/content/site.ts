@@ -14,6 +14,8 @@ export const siteSettings: SiteSettings = {
   contactEmail: "info@crockettfoundationdc.org",
   ein: null,
   socialLinks: [],
+  // PayPal hosted donate link, e.g. "https://www.paypal.com/donate/?hosted_button_id=XXXX".
+  // Drives the header Donate button and the Partner page's PayPal button.
   donationUrl: null,
   footerNote:
     "To limit financial barriers to global education by providing financial and educational assistance to underserved high school and college students.", // draft — pending review; reused verbatim from the home mission pull quote

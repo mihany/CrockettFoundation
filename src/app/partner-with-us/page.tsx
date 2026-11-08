@@ -3,10 +3,15 @@ import { getPartnerContent } from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { DonateBlock } from "@/components/DonateBlock";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const partner = await getPartnerContent();
-  return { title: "Partner with us", description: partner.donateBody };
+  return pageMetadata({
+    title: "Partner With Us: Internships, Partnerships and Donations",
+    description: partner.donateBody,
+    path: "/partner-with-us/",
+  });
 }
 
 export default async function PartnerWithUsPage() {

@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 import { getPageIntro, getLegalPage } from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageIntro = await getPageIntro("privacy");
-  return { title: pageIntro.heading, description: pageIntro.intro };
+  return {
+    ...pageMetadata({ title: "Privacy Policy", description: pageIntro.intro, path: "/privacy/" }),
+    // Placeholder text is thin content; keep it out of the index until the
+    // real policy is written, then delete this line.
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function PrivacyPage() {

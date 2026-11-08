@@ -3,10 +3,15 @@ import { getPageIntro, getTeamMembers } from "@/content";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { TeamDirectory } from "@/components/TeamDirectory";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageIntro = await getPageIntro("who-we-are");
-  return { title: pageIntro.heading, description: pageIntro.intro };
+  return pageMetadata({
+    title: "Board and Leadership",
+    description: pageIntro.intro,
+    path: "/who-we-are/",
+  });
 }
 
 export default async function WhoWeArePage() {

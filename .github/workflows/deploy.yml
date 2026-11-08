@@ -73,3 +73,26 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Tells Bing (which also feeds DuckDuckGo, Yahoo, Ecosia and ChatGPT search),
+  # Yandex, Seznam and Naver about every URL in the sitemap right after a
+  # deploy, instead of waiting for them to recrawl. Skipped on the daily
+  # scheduled rebuild, which rarely changes content. The key is public by
+  # design: serving public/<KEY>.txt proves domain ownership. Best effort —
+  # a failure here never fails the deploy.
+  indexnow:
+    needs: deploy
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Submit sitemap URLs to IndexNow
+        env:
+          HOST: crockettfoundationdc.org
+          KEY: c3d16e0cadca5b6aa93414ec28ae495b
+        run: |
+          urls=$(curl -fsSL "https://$HOST/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | sed -e 's/<loc>//' -e 's#</loc>##' | jq -R . | jq -s .)
+          jq -n --arg host "$HOST" --arg key "$KEY" --argjson urls "$urls" \
+            '{host: $host, key: $key, keyLocation: "https://\($host)/\($key).txt", urlList: $urls}' \
+            | curl -fsS -X POST "https://api.indexnow.org/indexnow" \
+                -H "Content-Type: application/json; charset=utf-8" --data-binary @-

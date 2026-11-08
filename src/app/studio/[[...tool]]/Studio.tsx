@@ -30,9 +30,11 @@ export default function Studio() {
   }, []);
 
   // The Studio is full-viewport and manages its own scrolling. It sits over
-  // the site header and footer (root layout) rather than inside them.
+  // the site header and footer (root layout) rather than inside them. Keep the
+  // z-index low: Sanity UI portals popovers/menus (search, help, user menu) to
+  // <body> with z-index ~400, so a higher wrapper would hide them.
   return (
-    <div className="fixed inset-0 z-[1000] bg-white">
+    <div className="fixed inset-0 z-[1] bg-white">
       {ready && <NextStudio config={config} />}
     </div>
   );

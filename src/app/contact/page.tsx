@@ -3,10 +3,15 @@ import { getPageIntro, getSiteSettings } from "@/content";
 import { CONTACT_FORM_URL } from "@/lib/site";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageIntro = await getPageIntro("contact");
-  return { title: pageIntro.heading, description: pageIntro.intro };
+  return pageMetadata({
+    title: "Contact Us",
+    description: pageIntro.intro,
+    path: "/contact/",
+  });
 }
 
 export default async function ContactPage() {

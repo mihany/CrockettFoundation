@@ -4,10 +4,16 @@ import { getAboutContent } from "@/content";
 import { Container } from "@/components/Container";
 import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const about = await getAboutContent();
-  return { title: "About", description: about.mission };
+  return pageMetadata({
+    title: "About Us: Mission, Purpose and Vision",
+    description: about.intro,
+    path: "/about/",
+    image: about.image,
+  });
 }
 
 export default async function AboutPage() {

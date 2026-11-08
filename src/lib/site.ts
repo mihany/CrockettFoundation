@@ -28,9 +28,15 @@ export const DONATE_HREF = "/partner-with-us";
 // link, the same treatment as PartnerContent.donationUrl.
 export const CONTACT_FORM_URL: string | null = null;
 
-// The site's custom domain. Used only to build absolute URLs in sitemap.ts;
-// nothing else on the site depends on it.
+// The site's custom domain. Every absolute URL the site emits — canonical
+// links, Open Graph tags, structured data, sitemap.xml, robots.txt, llms.txt —
+// is built from it, so it must match the domain the site is actually served on.
 export const SITE_URL = "https://crockettfoundationdc.org";
+
+// Whether search engines and AI crawlers may index the site. While false,
+// every page carries `noindex, nofollow` and robots.txt disallows everything.
+// Flip to false for a private preview deploy.
+export const ALLOW_INDEXING = true;
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 

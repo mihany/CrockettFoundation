@@ -7,6 +7,8 @@ import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ProgramCard } from "@/components/ProgramCard";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd, pageMetadata, programJsonLd } from "@/lib/seo";
 
 interface ProgramDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -27,7 +29,13 @@ export async function generateMetadata(props: ProgramDetailPageProps): Promise<M
     return {};
   }
 
-  return { title: program.title, description: program.summary };
+  return pageMetadata({
+    title: program.title,
+    description: program.summary,
+    path: `/programs/${program.slug}/`,
+    image: program.image,
+    type: "article",
+  });
 }
 
 export default async function ProgramDetailPage(props: ProgramDetailPageProps) {
@@ -43,6 +51,16 @@ export default async function ProgramDetailPage(props: ProgramDetailPageProps) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          programJsonLd(program),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Programs", path: "/programs/" },
+            { name: program.title, path: `/programs/${program.slug}/` },
+          ]),
+        ]}
+      />
       <section className="bg-white pt-16 pb-12 sm:pt-20 sm:pb-16">
         <Container>
           <div className="flex flex-wrap items-center gap-3">

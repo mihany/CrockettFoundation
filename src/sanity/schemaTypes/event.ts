@@ -52,7 +52,23 @@ export const eventType = defineType({
     defineField({
       name: "location",
       type: "string",
-      description: 'Leave empty and the site shows "Location to be announced".',
+      description:
+        'Venue name and full street address, e.g. "MLK Memorial Library, 901 G St NW, Washington, DC 20001". Search engines use it to show the event in local results. Leave empty and the site shows "Location to be announced".',
+    }),
+    defineField({
+      name: "attendanceMode",
+      title: "How people attend",
+      type: "string",
+      description: "Tells Google and other search engines whether this is an in-person or online event.",
+      options: {
+        list: [
+          { title: "In person", value: "in-person" },
+          { title: "Online", value: "online" },
+          { title: "Hybrid (in person and online)", value: "hybrid" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "in-person",
     }),
     defineField({
       name: "registrationUrl",

@@ -83,11 +83,15 @@ export interface Program {
   pullQuote?: string;
   /** Null until a deadline is set; components render "Applications open soon" instead. */
   deadline: string | null;
+  /** The same deadline as an ISO calendar date (YYYY-MM-DD), for structured data. */
+  deadlineDate: string | null;
   /** Null until an application link exists; the apply CTA is hidden or disabled instead. */
   applyUrl: string | null;
   /** Null until a photo is supplied; components fall back to a shared placeholder. */
   image: ContentImage | null;
   order: number;
+  /** ISO timestamp of the last CMS edit; feeds sitemap.xml's lastmod. */
+  updatedAt: string | null;
 }
 
 export interface ContentImage {
@@ -96,6 +100,8 @@ export interface ContentImage {
   /** Describes the image for screen readers. */
   alt: string;
 }
+
+export type EventAttendanceMode = "in-person" | "online" | "hybrid";
 
 export interface Event {
   slug: string;
@@ -109,10 +115,14 @@ export interface Event {
   endDate: string | null;
   /** Null until a venue is confirmed; components render "Location to be announced" instead. */
   location: string | null;
+  /** How people attend. Drives the event's structured data for search engines. */
+  attendanceMode: EventAttendanceMode;
   /** Null until a registration link exists; the register CTA is replaced with a "coming soon" note instead. */
   registrationUrl: string | null;
   /** Null until a photo is supplied; components fall back to a shared placeholder. */
   image: ContentImage | null;
+  /** ISO timestamp of the last CMS edit; feeds sitemap.xml's lastmod. */
+  updatedAt: string | null;
 }
 
 export interface InternshipsContent {

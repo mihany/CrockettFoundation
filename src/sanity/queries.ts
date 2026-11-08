@@ -1,4 +1,10 @@
-import type { Event, Program, ProgramCategory, ProgramStatus } from "@/content/types";
+import type {
+  Event,
+  EventAttendanceMode,
+  Program,
+  ProgramCategory,
+  ProgramStatus,
+} from "@/content/types";
 import { client } from "./client";
 import { toContentImage, type SanityImageField } from "./image";
 
@@ -23,7 +29,9 @@ const EVENT_PROJECTION = `{
   startDate,
   endDate,
   location,
+  attendanceMode,
   registrationUrl,
+  "updatedAt": _updatedAt,
   ${IMAGE}
 }`;
 
@@ -41,6 +49,7 @@ const PROGRAM_PROJECTION = `{
   deadline,
   applyUrl,
   order,
+  "updatedAt": _updatedAt,
   ${IMAGE}
 }`;
 
@@ -52,7 +61,9 @@ interface EventResult {
   startDate: string;
   endDate: string | null;
   location: string | null;
+  attendanceMode: EventAttendanceMode | null;
   registrationUrl: string | null;
+  updatedAt: string | null;
   image: SanityImageField | null;
 }
 
@@ -70,6 +81,7 @@ interface ProgramResult {
   deadline: string | null;
   applyUrl: string | null;
   order: number;
+  updatedAt: string | null;
   image: SanityImageField | null;
 }
 
@@ -86,8 +98,13 @@ function toEvent(result: EventResult): Event {
     startDate: result.startDate,
     endDate: result.endDate,
     location: result.location,
+    // Events published before this field existed: infer from the location text.
+    attendanceMode:
+      result.attendanceMode ??
+      (/\b(online|virtual|zoom|webinar)\b/i.test(result.location ?? "") ? "online" : "in-person"),
     registrationUrl: result.registrationUrl,
     image: toContentImage(result.image),
+    updatedAt: result.updatedAt,
   };
 }
 
@@ -104,9 +121,11 @@ function toProgram(result: ProgramResult): Program {
     note: result.note ?? undefined,
     pullQuote: result.pullQuote ?? undefined,
     deadline: result.deadline ? deadlineFormat.format(new Date(`${result.deadline}T00:00:00Z`)) : null,
+    deadlineDate: result.deadline,
     applyUrl: result.applyUrl,
     image: toContentImage(result.image),
     order: result.order,
+    updatedAt: result.updatedAt,
   };
 }
 

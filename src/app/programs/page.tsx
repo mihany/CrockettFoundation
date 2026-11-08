@@ -5,10 +5,16 @@ import { Container } from "@/components/Container";
 import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
 import { StatusBadge } from "@/components/StatusBadge";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd, itemListJsonLd, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageIntro = await getPageIntro("programs");
-  return { title: pageIntro.heading, description: pageIntro.intro };
+  return pageMetadata({
+    title: "Study Abroad Scholarships and Programs",
+    description: pageIntro.intro,
+    path: "/programs/",
+  });
 }
 
 export default async function ProgramsPage() {
@@ -20,6 +26,18 @@ export default async function ProgramsPage() {
 
   return (
     <>
+      <JsonLd
+        data={[
+          itemListJsonLd(
+            "Crockett Foundation scholarships and programs",
+            sorted.map((program) => `/programs/${program.slug}/`),
+          ),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Programs", path: "/programs/" },
+          ]),
+        ]}
+      />
       <section className="bg-white pt-16 pb-12 sm:pt-20 sm:pb-16">
         <Container>
           <h1 className="font-display text-4xl text-gold-deep sm:text-5xl">

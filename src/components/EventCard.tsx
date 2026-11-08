@@ -25,7 +25,7 @@ export function EventCard({ event, headingLevel = "h2", stacked = false }: Event
       <ContentImage image={event.image} className={stacked ? "" : "sm:w-72 sm:shrink-0"} />
       <div>
         <p className="text-sm font-medium text-gold-primary">
-          {formatEventDate(event)}
+          <time dateTime={event.startDate}>{formatEventDate(event)}</time>
         </p>
         <Heading className="mt-1 font-display text-xl text-gold-deep group-hover:underline group-hover:decoration-gold-accent group-hover:underline-offset-4">
           {event.title}

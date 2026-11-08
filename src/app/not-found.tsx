@@ -6,6 +6,7 @@ import { StudioRedirect } from "@/components/StudioRedirect";
 export const metadata: Metadata = {
   title: "Page not found",
   description: "The page you're looking for doesn't exist or may have moved.",
+  robots: { index: false, follow: true },
 };
 
 export default function NotFound() {

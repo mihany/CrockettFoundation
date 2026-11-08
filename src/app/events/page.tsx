@@ -4,10 +4,16 @@ import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { EventCard } from "@/components/EventCard";
 import { splitEvents } from "@/lib/events";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd, eventJsonLd, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageIntro = await getPageIntro("events");
-  return { title: pageIntro.heading, description: pageIntro.intro };
+  return pageMetadata({
+    title: "Events: Study Abroad Info Sessions and Workshops",
+    description: pageIntro.intro,
+    path: "/events/",
+  });
 }
 
 export default async function EventsPage() {
@@ -16,6 +22,17 @@ export default async function EventsPage() {
 
   return (
     <>
+      {/* Full Event entities for upcoming events, so search engines can list
+          them even before they crawl each event page. */}
+      <JsonLd
+        data={[
+          ...upcoming.map(eventJsonLd),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Events", path: "/events/" },
+          ]),
+        ]}
+      />
       <section className="bg-white pt-16 pb-12 sm:pt-20 sm:pb-16">
         <Container>
           <h1 className="font-display text-4xl text-gold-deep sm:text-5xl">

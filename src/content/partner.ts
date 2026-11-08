@@ -2,11 +2,11 @@
 // partnershipBody are still drafted placeholder copy — the client's
 // Community Partnerships text arrived cut off ("Organizations …"), so it
 // needs a follow-up before this section is final.
-// donationUrl is null until the client supplies their PayPal donate link
-// (https://www.paypal.com/donate/?hosted_button_id=…); the donate block
-// renders a bordered "Online giving opens soon" placeholder until then,
-// instead of a dead button.
+// donationUrl mirrors siteSettings.donationUrl so the PayPal link is set in
+// one place; while it is null the donate block renders a bordered "Online
+// giving opens soon" placeholder instead of a dead button.
 import type { PartnerContent } from "./types";
+import { siteSettings } from "./site";
 
 export const partnerContent: PartnerContent = {
   internships: {
@@ -25,7 +25,7 @@ export const partnerContent: PartnerContent = {
   donateHeading: "Donate",
   donateBody:
     "Make a contribution today to empower underserved youth to advance their global training and knowledge to thrive in today’s 21st century interconnected workforce.",
-  donationUrl: null,
+  donationUrl: siteSettings.donationUrl,
   partnershipHeading: "Community Partnerships", // draft — pending review
   partnershipBody:
     "We welcome partnerships with schools, employers, and community organizations that share our commitment to expanding access to global education.", // draft — pending review

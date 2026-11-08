@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { SiteSettings } from "@/content/types";
-import { NAV_ITEMS } from "@/lib/site";
+import { NAV_ITEMS, asset } from "@/lib/site";
 import { Container } from "./Container";
 
 interface SiteFooterProps {
@@ -14,6 +14,17 @@ export function SiteFooter({ settings }: SiteFooterProps) {
   return (
     <footer className="border-t border-ink/10 bg-cream">
       <Container className="flex flex-col gap-8 py-12">
+        <Link href="/" className="inline-block self-start">
+          {/* Plain <img> + asset(): next/image doesn't apply the basePath to src. */}
+          <img
+            src={asset("/images/logo.webp")}
+            alt={settings.orgName}
+            width={1301}
+            height={669}
+            className="h-16 w-auto"
+          />
+        </Link>
+
         <p className="max-w-prose font-display text-lg text-ink">{settings.footerNote}</p>
 
         <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm">

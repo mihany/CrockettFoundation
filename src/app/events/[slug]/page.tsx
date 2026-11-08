@@ -6,6 +6,8 @@ import { Container } from "@/components/Container";
 import { ContentImage } from "@/components/ContentImage";
 import { Section } from "@/components/Section";
 import { formatEventDate, isUpcoming } from "@/lib/events";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd, eventJsonLd, pageMetadata } from "@/lib/seo";
 
 interface EventDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -26,7 +28,15 @@ export async function generateMetadata(props: EventDetailPageProps): Promise<Met
     return {};
   }
 
-  return { title: event.title, description: event.summary };
+  // The date in the title helps searchers pick the right session and makes
+  // every event title unique even when sessions repeat.
+  return pageMetadata({
+    title: `${event.title} (${formatEventDate(event)})`,
+    description: event.summary,
+    path: `/events/${event.slug}/`,
+    image: event.image,
+    type: "article",
+  });
 }
 
 export default async function EventDetailPage(props: EventDetailPageProps) {
@@ -41,10 +51,20 @@ export default async function EventDetailPage(props: EventDetailPageProps) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          eventJsonLd(event),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Events", path: "/events/" },
+            { name: event.title, path: `/events/${event.slug}/` },
+          ]),
+        ]}
+      />
       <section className="bg-white pt-16 pb-12 sm:pt-20 sm:pb-16">
         <Container>
           <p className="text-sm font-medium text-gold-primary">
-            {formatEventDate(event)}
+            <time dateTime={event.startDate}>{formatEventDate(event)}</time>
             {!upcoming && " · Past event"}
           </p>
           <h1 className="mt-2 font-display text-4xl text-gold-deep sm:text-5xl">{event.title}</h1>
@@ -64,7 +84,9 @@ export default async function EventDetailPage(props: EventDetailPageProps) {
 
       <Section tone="cream" rule>
         <h2 className="font-display text-xl text-gold-deep">When and where</h2>
-        <p className="mt-3 text-ink">{formatEventDate(event)}</p>
+        <p className="mt-3 text-ink">
+          <time dateTime={event.startDate}>{formatEventDate(event)}</time>
+        </p>
         <p className="mt-1 text-ink">{event.location ?? "Location to be announced"}</p>
       </Section>
 
